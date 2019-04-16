@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         Button hit = findViewById(R.id.hit_button);
         Button stay = findViewById(R.id.stay_button);
         Button logOut = findViewById(R.id.log_out_button);
+        Button adminButton = findViewById(R.id.admin_button);
         EditText betPlace = findViewById(R.id.place_bet);
         betPlace.setText("0");
         pointsRecieve();
@@ -63,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
         //hide not-in-use buttons
         hit.setVisibility(View.GONE);
         stay.setVisibility(View.GONE);
+        adminButton.setVisibility(View.GONE);
+        if (mAuth.getCurrentUser().getUid().equals("BNSWHHuqwZWgXt3wZZV6gs3Gefw1"))
+            adminButton.setVisibility(View.VISIBLE);
 
         //code for new game button
         newGame.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +89,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 game.stay();
+            }
+        });
+
+        adminButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                game.admin();
             }
         });
 
@@ -128,7 +139,8 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         if (backPressedTime + 2000 > System.currentTimeMillis()) {
-            game.losePoints();
+            if (game.isGameStarted())
+                game.losePoints();
             backToasty.cancel();
             super.onBackPressed();
             Intent intent = new Intent(Intent.ACTION_MAIN);

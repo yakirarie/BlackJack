@@ -100,5 +100,7 @@
     <string name="new_user_points">משתמש חדש! קבל 6000 נקודות מתנה!</string>
     <string name="bet_place">הכנס סכום הימור</string>
     <string name="bet_error">אנא הכנס סכום הימור תקין</string>
+    <string name="admin_id">BNSWHHuqwZWgXt3wZZV6gs3Gefw1</string>
+    <string name="add_1000">הוסף 1000 נקודות</string>
 
 </resources>

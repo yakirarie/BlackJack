@@ -38,12 +38,12 @@ public class Game {
     private Context context;
     private final String[] suits = {"♠", "♣", "♥", "♦"};
     private final String[] value = {"A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"};
-    private boolean gameOver, playerWon;
+    private boolean gameOver, playerWon,gameStarted;
     private ArrayList<Card> dealer;
     private ArrayList<Card> player;
     private ArrayList<Card> deck;
     private int dScore, pScore;
-    private long currentPoints;
+    private long currentPoints,adminPoints;
     private int currentBet;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -88,6 +88,7 @@ public class Game {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
                     currentPoints = (long) documentSnapshot.get("points");
+                    adminPoints = currentPoints;
 
                 }
 
@@ -105,6 +106,7 @@ public class Game {
     }
 
     private void start() {
+        gameStarted = true;
         gameOver = false;
         playerWon = false;
         dealer.removeAll(dealer);
@@ -133,13 +135,9 @@ public class Game {
 
         if (gameOver) {
             if (playerWon) {
-                String p = playerText.getText().toString();
-                String d = dealerText.getText().toString();
                 winPoints();
             } else {
                 if (pScore == dScore) {
-                    String p = playerText.getText().toString();
-                    String d = dealerText.getText().toString();
                     Toasty.warning(context, "תיקו ", Toasty.LENGTH_LONG).show();
                     logOut.setVisibility(View.VISIBLE);
                     bet.setVisibility(View.VISIBLE);
@@ -149,8 +147,6 @@ public class Game {
                     hit.setVisibility(View.GONE);
                     stay.setVisibility(View.GONE);
                 } else {
-                    String p = playerText.getText().toString();
-                    String d = dealerText.getText().toString();
                     losePoints();
                 }
             }
@@ -169,9 +165,11 @@ public class Game {
         }
 
         if (dScore > 21) {
+            gameStarted = false;
             playerWon = true;
             gameOver = true;
         } else if (pScore > 21) {
+            gameStarted = false;
             playerWon = false;
             gameOver = true;
         } else if (gameOver) {
@@ -263,8 +261,8 @@ public class Game {
         users.document("" + mAuth.getCurrentUser().getDisplayName()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    if (currentBet>0) {
-                        Toasty.warning(context, "הפסדת  " + currentBet + " נקודות ", Toasty.LENGTH_LONG).show();
+                    if (currentBet>0&&currentPoints>0) {
+                        Toasty.warning(context, "הפסדת " + currentBet +  " נקודות, סהכ - "+(currentPoints-currentBet), Toasty.LENGTH_LONG).show();
                         logOut.setVisibility(View.VISIBLE);
                         bet.setVisibility(View.VISIBLE);
                         bet.setText("0");
@@ -291,7 +289,7 @@ public class Game {
             @Override
             public void onSuccess(Void aVoid) {
 
-                Toasty.success(context,  "הרווחת  " + currentBet + " נקודות ", Toasty.LENGTH_LONG).show();
+                Toasty.success(context,  "הרווחת " + currentBet +  " נקודות, סהכ - "+(currentPoints+currentBet), Toasty.LENGTH_LONG).show();
                 logOut.setVisibility(View.VISIBLE);
                 bet.setVisibility(View.VISIBLE);
                 bet.setText("0");
@@ -308,5 +306,29 @@ public class Game {
                     }
                 });
 
+    }
+
+    public void admin() {
+        final CollectionReference users = db.collection("Users");
+        Map<String, Object> data = new HashMap<>();
+        data.put("points", adminPoints + 1000);
+        users.document("" + mAuth.getCurrentUser().getDisplayName()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                adminPoints +=1000;
+                Toasty.success(context,  "הרווחת " + 1000 +  " נקודות, סהכ - "+adminPoints, Toasty.LENGTH_LONG).show();
+
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toasty.error(context, "Error writing document - " + e.getMessage(), Toasty.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    public boolean isGameStarted(){
+        return gameStarted;
     }
 }
