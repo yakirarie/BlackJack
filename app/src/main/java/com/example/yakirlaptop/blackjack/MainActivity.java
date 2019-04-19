@@ -27,7 +27,7 @@ import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
 
-// BlackJack by Yakir Arie
+// blackjack by Yakir Arie
 public class MainActivity extends AppCompatActivity {
     private long backPressedTime;
     private Toast backToasty;
