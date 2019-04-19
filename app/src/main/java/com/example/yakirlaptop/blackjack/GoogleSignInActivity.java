@@ -56,7 +56,7 @@ public class GoogleSignInActivity extends BaseActivity implements
 
     private GoogleSignInClient mGoogleSignInClient;
     private TextView mStatusTextView;
-    private TextView mDetailTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +65,7 @@ public class GoogleSignInActivity extends BaseActivity implements
 
         // Views
         mStatusTextView = findViewById(R.id.status);
-        mDetailTextView = findViewById(R.id.detail);
+
 
         // Button listeners
         findViewById(R.id.signInButton).setOnClickListener(this);
@@ -193,7 +193,6 @@ public class GoogleSignInActivity extends BaseActivity implements
         hideProgressDialog();
         if (user != null) {
             mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
-            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
             Toasty.success(getApplicationContext(), "ברוך הבא " + user.getDisplayName() + "!", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this,MainActivity.class);
             intent.putExtra("isNew",isNewUser);
@@ -201,7 +200,7 @@ public class GoogleSignInActivity extends BaseActivity implements
             startActivity(intent);
         } else {
             mStatusTextView.setText(R.string.signed_out);
-            mDetailTextView.setText(null);
+
 
             findViewById(R.id.signInButton).setVisibility(View.VISIBLE);
             findViewById(R.id.signOutAndDisconnect).setVisibility(View.GONE);

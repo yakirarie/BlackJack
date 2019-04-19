@@ -18,7 +18,7 @@
             style="@style/ThemeOverlay.FirebaseIcon"
             android:id="@+id/googleIcon"
             android:contentDescription="@string/desc_firebase_lockup"
-            android:src="@drawable/firebase_lockup_400"
+            android:src="@drawable/blackjack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -27,18 +27,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/title_bottom_margin"
-            android:text="@string/google_title_text"
+            android:text="@string/developer"
             android:theme="@style/ThemeOverlay.MyTitleText" />
 
         <TextView
             android:id="@+id/status"
             style="@style/ThemeOverlay.MyTextDetail"
-            android:text="@string/signed_out" />
+            android:text="@string/disconected" />
 
-        <TextView
-            android:id="@+id/detail"
-            style="@style/ThemeOverlay.MyTextDetail"
-            tools:text="Firebase User ID: 123456789abc" />
+
 
     </LinearLayout>
 

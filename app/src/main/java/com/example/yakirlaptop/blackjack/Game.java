@@ -261,6 +261,7 @@ public class Game {
         users.document("" + mAuth.getCurrentUser().getDisplayName()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
+                    adminPoints = currentPoints - currentBet;
                     if (currentBet>0&&currentPoints>0) {
                         Toasty.warning(context, "הפסדת " + currentBet +  " נקודות, סהכ - "+(currentPoints-currentBet), Toasty.LENGTH_LONG).show();
                         logOut.setVisibility(View.VISIBLE);
@@ -288,7 +289,7 @@ public class Game {
         users.document("" + mAuth.getCurrentUser().getDisplayName()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-
+                adminPoints = currentPoints + currentBet;
                 Toasty.success(context,  "הרווחת " + currentBet +  " נקודות, סהכ - "+(currentPoints+currentBet), Toasty.LENGTH_LONG).show();
                 logOut.setVisibility(View.VISIBLE);
                 bet.setVisibility(View.VISIBLE);
